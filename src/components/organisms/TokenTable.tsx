@@ -4,7 +4,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { TokenColumn } from './TokenColumn';
 import { FilterSidebar } from './FilterSidebar';
-import { MOCK_TOKENS, MOCK_TOKENS_BNB, updateTokenData } from '@/lib/mockData';
+import { MOCK_TOKENS, MOCK_TOKENS_BNB, updateTokenData, generateNewSOLToken, generateNewBNBToken } from '@/lib/mockData';
 import { Token, MarketUpdate, SortField, SortDirection } from '@/types';
 import { webSocketService } from '@/services/websocketMock';
 import { AppHeader } from './AppHeader';
@@ -103,6 +103,38 @@ export const TokenTable: React.FC = () => {
             clearInterval(updateInterval);
         };
     }, []);
+
+    // Dynamically add new tokens at random intervals (max 15 seconds) at the top of New Pairs column
+    useEffect(() => {
+        let timeoutId: NodeJS.Timeout;
+
+        const scheduleNextToken = () => {
+            // Generate random interval between 0-15 seconds (0-15000 milliseconds)
+            const randomInterval = Math.random() * 15000;
+
+            timeoutId = setTimeout(() => {
+                setTokens((prevTokens) => {
+                    // Generate a new token based on the selected chain
+                    const newToken = selectedChain === 'SOL' ? generateNewSOLToken() : generateNewBNBToken();
+
+                    // Prepend the new token to the beginning of the array
+                    // This ensures it appears at the top of the New Pairs column
+                    return [newToken, ...prevTokens];
+                });
+
+                // Schedule the next token with a new random interval
+                scheduleNextToken();
+            }, randomInterval);
+        };
+
+        // Start the first token addition
+        scheduleNextToken();
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [selectedChain]); // Re-create timeout chain when chain changes
+
 
     // Comprehensive filtering logic
     const filteredTokens = tokens.filter(token => {

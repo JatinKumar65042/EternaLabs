@@ -196,6 +196,78 @@ export const MOCK_TOKENS_BNB: Token[] = [
     ...Array.from({ length: 18 }, (_, i) => generateBNBToken(i + 38, 'migrated', (i + 1) * 1800000 + Math.random() * 3600000, 38))
 ];
 
+// Counters for generating new tokens dynamically
+let solTokenCounter = 100;
+let bnbTokenCounter = 100;
+
+// Generate a new SOL token with current timestamp (0 elapsed time)
+export const generateNewSOLToken = (): Token => {
+    const tokenInfo = tokenNames[solTokenCounter % tokenNames.length];
+    const protocols = ['Pump', 'Mayhem', 'Bonk', 'Raydium', 'Moonshot', 'Orca', 'Jupiter Studio', 'Meteora AMM', 'Daos.fun', 'LaunchLab'];
+    const quoteTokens = ['SOL', 'USDC', 'USDT'];
+
+    const token: Token = {
+        id: `new-sol-${solTokenCounter}`,
+        symbol: tokenInfo.symbol,
+        name: tokenInfo.name,
+        address: generateContractId(tokenInfo.symbol + Math.random().toString(36).substring(7)),
+        price: Math.random() * 0.1,
+        priceChange24h: Math.floor(Math.random() * 80),
+        volume24h: Math.floor(Math.random() * 5000),
+        marketCap: Math.floor(Math.random() * 10000) + 2000,
+        liquidity: Math.floor(Math.random() * 8000) + 2000,
+        holders: Math.floor(Math.random() * 20),
+        createdAt: new Date().toISOString(), // Current time = 0 elapsed seconds
+        logoUrl: `https://ui-avatars.com/api/?name=${tokenInfo.symbol}&background=${tokenInfo.bg}`,
+        status: 'new',
+        txns: Math.floor(Math.random() * 50) + 1,
+        audit: 'passed',
+        contractId: generateContractId(tokenInfo.symbol),
+        userCount: Math.floor(Math.random() * 15),
+        chartCount: Math.floor(Math.random() * 5),
+        badges: randomBadges(),
+        protocol: protocols[Math.floor(Math.random() * protocols.length)],
+        quoteToken: quoteTokens[Math.floor(Math.random() * quoteTokens.length)]
+    };
+
+    solTokenCounter++;
+    return token;
+};
+
+// Generate a new BNB token with current timestamp (0 elapsed time)
+export const generateNewBNBToken = (): Token => {
+    const tokenInfo = bnbTokenNames[bnbTokenCounter % bnbTokenNames.length];
+    const protocols = ['PancakeSwap', 'BakerySwap', 'Biswap', 'ApeSwap', 'BabySwap'];
+    const quoteTokens = ['WBNB', 'BUSD', 'USDT'];
+
+    const token: Token = {
+        id: `new-bnb-${bnbTokenCounter}`,
+        symbol: tokenInfo.symbol,
+        name: tokenInfo.name,
+        address: `0x${Math.random().toString(16).substring(2, 42)}`,
+        price: Math.random() * 0.01,
+        priceChange24h: Math.floor(Math.random() * 60),
+        volume24h: Math.floor(Math.random() * 3000),
+        marketCap: Math.floor(Math.random() * 8000) + 1000,
+        liquidity: Math.floor(Math.random() * 5000) + 1000,
+        holders: Math.floor(Math.random() * 15),
+        createdAt: new Date().toISOString(), // Current time = 0 elapsed seconds
+        logoUrl: `https://ui-avatars.com/api/?name=${tokenInfo.symbol}&background=${tokenInfo.bg}`,
+        status: 'new',
+        txns: Math.floor(Math.random() * 40) + 1,
+        audit: 'passed',
+        contractId: `0x${Math.random().toString(16).substring(2, 10)}...bsc`,
+        userCount: Math.floor(Math.random() * 10),
+        chartCount: Math.floor(Math.random() * 3),
+        badges: randomBadges(),
+        protocol: protocols[Math.floor(Math.random() * protocols.length)],
+        quoteToken: quoteTokens[Math.floor(Math.random() * quoteTokens.length)]
+    };
+
+    bnbTokenCounter++;
+    return token;
+};
+
 // Export function to update token data (for real-time updates)
 export const updateTokenData = (token: Token): Token => {
     const priceChange = (Math.random() - 0.5) * 0.1; // ±10% change

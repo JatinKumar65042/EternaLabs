@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useState, useEffect } from 'react';
 import { Token } from '@/types';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -23,10 +23,23 @@ export const TokenCard = React.memo<TokenCardProps>(({ token, index }) => {
     const quickBuySize = useAppSelector((state) => state.settings.quickBuySize);
     const metricsSize = useAppSelector((state) => state.settings.metricsSize);
 
+    // Add a ticker state that updates every 30 seconds to force time recalculation
+    const [currentTime, setCurrentTime] = useState(Date.now());
+
+    useEffect(() => {
+        // Update current time every 30 seconds to refresh time ago displays
+        const interval = setInterval(() => {
+            setCurrentTime(Date.now());
+        }, 30000); // 30 seconds
+
+        return () => clearInterval(interval);
+    }, []);
+
     // Memoize expensive calculations
     const formattedMarketCap = useMemo(() => formatCurrency(token.marketCap), [token.marketCap]);
     const formattedVolume = useMemo(() => formatCurrency(token.volume24h), [token.volume24h]);
-    const timeAgo = useMemo(() => formatTimeAgo(token.createdAt), [token.createdAt]);
+    // Now depends on currentTime so it updates every 30 seconds
+    const timeAgo = useMemo(() => formatTimeAgo(token.createdAt), [token.createdAt, currentTime]);
     const avatarColor = useMemo(() => getAvatarColor(token.symbol), [token.symbol]);
 
     // Alternating background: even indices get a slightly lighter bg

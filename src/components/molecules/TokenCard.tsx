@@ -23,14 +23,14 @@ export const TokenCard = React.memo<TokenCardProps>(({ token, index }) => {
     const quickBuySize = useAppSelector((state) => state.settings.quickBuySize);
     const metricsSize = useAppSelector((state) => state.settings.metricsSize);
 
-    // Add a ticker state that updates every 30 seconds to force time recalculation
+    // Add a ticker state that updates every 2 seconds to force time recalculation
     const [currentTime, setCurrentTime] = useState(Date.now());
 
     useEffect(() => {
-        // Update current time every 30 seconds to refresh time ago displays
+        // Update current time every 2 seconds to refresh time ago displays (matches other data updates)
         const interval = setInterval(() => {
             setCurrentTime(Date.now());
-        }, 30000); // 30 seconds
+        }, 2000); // 2 seconds - matches the token data update interval
 
         return () => clearInterval(interval);
     }, []);

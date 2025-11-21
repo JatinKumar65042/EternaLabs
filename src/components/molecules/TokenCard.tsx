@@ -17,8 +17,8 @@ interface TokenCardProps {
     index: number;
 }
 
-// Memoize the component to prevent unnecessary re-renders
-export const TokenCard = React.memo<TokenCardProps>(({ token, index }) => {
+// Export without memo to allow internal state updates to trigger re-renders
+export const TokenCard: React.FC<TokenCardProps> = ({ token, index }) => {
     // Memoize Redux selectors to avoid unnecessary recalculations
     const quickBuySize = useAppSelector((state) => state.settings.quickBuySize);
     const metricsSize = useAppSelector((state) => state.settings.metricsSize);
@@ -38,7 +38,7 @@ export const TokenCard = React.memo<TokenCardProps>(({ token, index }) => {
     // Memoize expensive calculations
     const formattedMarketCap = useMemo(() => formatCurrency(token.marketCap), [token.marketCap]);
     const formattedVolume = useMemo(() => formatCurrency(token.volume24h), [token.volume24h]);
-    // Now depends on currentTime so it updates every 30 seconds
+    // Now depends on currentTime so it updates every 2 seconds
     const timeAgo = useMemo(() => formatTimeAgo(token.createdAt), [token.createdAt, currentTime]);
     const avatarColor = useMemo(() => getAvatarColor(token.symbol), [token.symbol]);
 
@@ -275,13 +275,4 @@ export const TokenCard = React.memo<TokenCardProps>(({ token, index }) => {
             </TooltipContent>
         </Tooltip>
     );
-}, (prevProps, nextProps) => {
-    // Custom comparison - only re-render if key token data changed
-    return (
-        prevProps.token.id === nextProps.token.id &&
-        prevProps.token.marketCap === nextProps.token.marketCap &&
-        prevProps.token.volume24h === nextProps.token.volume24h &&
-        prevProps.token.liquidity === nextProps.token.liquidity &&
-        prevProps.index === nextProps.index
-    );
-});
+};

@@ -12,8 +12,8 @@ export const ChainSelector: React.FC<ChainSelectorProps> = ({ selectedChain, onS
             <button
                 onClick={() => onSelect('SOL')}
                 className={`h-6 w-6 rounded-full flex items-center justify-center border transition-all cursor-pointer ${selectedChain === 'SOL'
-                        ? 'bg-[#14F195]/20 border-[#14F195] shadow-[0_0_10px_rgba(20,241,149,0.3)]'
-                        : 'bg-[#14F195]/5 border-[#14F195]/20 hover:bg-[#14F195]/10'
+                    ? 'bg-[#14F195]/20 border-[#14F195] shadow-[0_0_10px_rgba(20,241,149,0.3)]'
+                    : 'bg-[#14F195]/5 border-[#14F195]/20 hover:bg-[#14F195]/10'
                     }`}
                 title="Solana"
             >
@@ -29,8 +29,8 @@ export const ChainSelector: React.FC<ChainSelectorProps> = ({ selectedChain, onS
             <button
                 onClick={() => onSelect('BNB')}
                 className={`h-6 w-6 rounded-full flex items-center justify-center border transition-all cursor-pointer ${selectedChain === 'BNB'
-                        ? 'bg-[#F3BA2F]/20 border-[#F3BA2F] shadow-[0_0_10px_rgba(243,186,47,0.3)]'
-                        : 'bg-[#F3BA2F]/5 border-[#F3BA2F]/20 hover:bg-[#F3BA2F]/10'
+                    ? 'bg-[#F3BA2F]/20 border-[#F3BA2F] shadow-[0_0_10px_rgba(243,186,47,0.3)]'
+                    : 'bg-[#F3BA2F]/5 border-[#F3BA2F]/20 hover:bg-[#F3BA2F]/10'
                     }`}
                 title="BNB Chain"
             >
